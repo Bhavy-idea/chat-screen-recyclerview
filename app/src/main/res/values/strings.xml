@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Apr 4 Chat UI</string>
+    <string name="type_here">Type Here..</string>
+    <string name="sender">Sender</string>
+    <string name="receiver">Receiver</string>
+</resources>

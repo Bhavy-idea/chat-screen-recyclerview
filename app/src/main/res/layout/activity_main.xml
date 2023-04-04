@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e7eff6"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="@string/sender"
+        android:paddingEnd="@dimen/dp_10"
+        android:paddingStart="@dimen/dp_0"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_20"
+        app:layout_constraintBottom_toBottomOf="@+id/isSender"
+        app:layout_constraintEnd_toStartOf="@+id/isSender"
+        app:layout_constraintTop_toTopOf="@+id/isSender" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/isSender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:thumbTint="@color/teal_700"
+        app:trackTint="#BCCFB0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="@string/receiver"
+        android:textColor="@color/black"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_0"
+        android:textSize="@dimen/sp_20"
+        app:layout_constraintBottom_toBottomOf="@+id/isSender"
+        app:layout_constraintStart_toEndOf="@+id/isSender"
+        app:layout_constraintTop_toTopOf="@+id/isSender" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewChat"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_0"
+        android:paddingBottom="@dimen/dp_20"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/isSender"
+        tools:listitem="@layout/layout_left_side_chat" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        android:hint="@string/type_here"
+        app:boxStrokeColor="@color/blue"
+        android:layout_marginEnd="@dimen/dp_10"
+        app:hintTextColor="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewUser"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewUser"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:src="@drawable/ic_camera"
+        android:padding="@dimen/dp_8"
+        android:scaleType="fitXY"
+        android:layout_marginStart="@dimen/dp_10"
+        app:layout_constraintStart_toEndOf="@id/textInputLayout"
+        android:layout_marginEnd="@dimen/dp_14"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewSendMessage"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewSendMessage"
+        android:layout_width="@dimen/dp_34"
+        android:layout_height="@dimen/dp_44"
+        android:src="@drawable/ic_send"
+        android:layout_marginEnd="@dimen/dp_14"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
