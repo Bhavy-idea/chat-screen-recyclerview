@@ -1,17 +1,17 @@
 package com.example.apr4chatui
 
 import android.content.*
-import android.net.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.*
 import android.widget.*
+import androidx.activity.result.contract.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apr4chatui.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var imageUri: Uri
+    private var imageUri = ""
     private lateinit var binding: ActivityMainBinding
     private lateinit var chatAdapter: ChatAdapter
     private var chatItemList = ArrayList<ChatItem>()
@@ -26,19 +26,42 @@ class MainActivity : AppCompatActivity() {
 
         chatAdapter = ChatAdapter(chatItemList)
 
-        binding.recyclerViewChat.layoutManager = LinearLayoutManager(this)
+        val imageData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+
+            it.data?.data?.let {
+                imageUri = it.toString()
+                if (imageUri.toString().isNotEmpty()) {
+                    Toast.makeText(this, "Image Selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        val manager = LinearLayoutManager(this)
+        binding.recyclerViewChat.layoutManager = manager
         binding.recyclerViewChat.adapter = chatAdapter
 
         binding.isSender.setOnCheckedChangeListener { buttonView, isChecked ->
             isSender = isChecked
         }
 
+        binding.recyclerViewChat.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+
+//            Log.d("stateChange View", v.toString())
+//            Log.d("stateChange Scroll X", scrollX.toString())
+//            Log.d("stateChange Scroll Y", scrollY.toString())
+
+//            Log.d("data",manager.findFirstCompletelyVisibleItemPosition().toString())
+//            Log.d("data",manager.findFirstVisibleItemPosition().toString())
+//            Log.d("data",manager.findLastCompletelyVisibleItemPosition().toString())
+//            Log.d("data",manager.findLastVisibleItemPosition().toString())
+
+        }
+
         binding.imageViewUser.setOnClickListener {
             mediaType = 1
             val gallery =
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, 100)
-
+            imageData.launch(gallery)
         }
 
         binding.imageViewSendMessage.setOnClickListener {
@@ -46,41 +69,27 @@ class MainActivity : AppCompatActivity() {
             val editTextMessage = binding.editTextMessage.text.toString()
 
             if (editTextMessage.isEmpty()) {
-                if (mediaType != 1) {
-                    mediaType = 2
-                    if (binding.editTextMessage.text.toString().isNotEmpty()) {
-                        chatItemList.add(ChatItem(isSender, editTextMessage, mediaType))
-                        chatAdapter.notifyItemInserted(chatItemList.size)
-                        binding.editTextMessage.text?.clear()
-                    } else {
-                        Toast.makeText(this, "Please Enter Message", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
+                if (imageUri.toString().isNotBlank()){
                     chatItemList.add(ChatItem(isSender, imageUri.toString(), mediaType))
                     chatAdapter.notifyItemInserted(chatItemList.size)
+                    imageUri = ""
+                    mediaType = -1
+                }else{
+                    Toast.makeText(this, "Please Enter Message or Image", Toast.LENGTH_SHORT).show()
                 }
-            }else{
+            } else {
                 mediaType = 2
-                chatItemList.add(ChatItem(isSender, editTextMessage, mediaType))
-                chatAdapter.notifyItemInserted(chatItemList.size)
-                binding.editTextMessage.text?.clear()
-            }
-        }
-
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100) {
-
-            data?.data?.let {
-                imageUri = it
-                if (imageUri.toString().isNotEmpty()) {
-                    Toast.makeText(this, "Image Selected", Toast.LENGTH_SHORT).show()
+                if (editTextMessage.isNotEmpty()) {
+                    chatItemList.add(ChatItem(isSender, binding.editTextMessage.text.toString(), mediaType))
+                    chatAdapter.notifyItemInserted(chatItemList.size)
+                    mediaType = -1
+                    binding.editTextMessage.text?.clear()
+                } else {
+                    Toast.makeText(this, "Please Enter Message or Image", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
     }
 
 }
